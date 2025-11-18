@@ -9,7 +9,9 @@ ssh -i C:\Users\mikae\Documents\Project\Server\key2 root@65.21.244.96
 Rebuild tailwind
 npx tailwindcss -i ./backend/core/static/css/input.css -o ./backend/core/static/css/tailwind.css --minify --verbose
 
-docker exec -it fastapi_htmx_dev python /app/backend/scripts/manage_users.py admin --password 1234 --admin --caller "Main"
+docker exec -it faktura python /app/backend/scripts/manage_users.py admin --password 1234 --admin 1 --caller "Admin"
+docker exec -it faktura python /app/backend/scripts/manage_users.py user1 --password 1234 --caller "User 1"
+docker exec -it faktura python /app/backend/scripts/manage_users.py user2 --password 1234 --caller "User 2"
 
 manage_users   admin --caller Admin --admin 1 --password 1234
 manage_users   eva --caller Eva --admin 0 --password 1234

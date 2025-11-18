@@ -305,7 +305,7 @@ async def upsert_invoice(
     query = db.query(Company)
     if(not user.admin):
         query = db.query(Company).filter(Company.caller_id == user.caller_id)
-    companies = query.all()
+    invoices = query.all()
 
 
     response = templates.TemplateResponse(
