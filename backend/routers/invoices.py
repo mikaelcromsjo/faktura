@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session, declarative_base
 from typing import Optional
 from datetime import datetime
 import os
+from core.auth import get_current_user
+
 
 from typing import List, Optional
 from core.models.base import Base
@@ -39,13 +41,17 @@ router = APIRouter(prefix="/invoices", tags=["invoices"])
 @router.get("/", response_class=HTMLResponse, name="invoices_list")
 def invoices_list(
     request: Request,
-    filter: Optional[str] = None,
     db: Session = Depends(get_db),
+    user = Depends(get_current_user)
 ):
     query = select(Invoice)
-    if filter:
-        query = query.where(Invoice.name.contains(filter))
-    invoices = db.execute(query).scalars().all()
+
+    query = db.query(Invoice)
+    if(not user.admin):
+        query = db.query(Company).filter(Invoice.caller_id == user.caller_id)
+    invoices = query.all()
+
+
     return templates.TemplateResponse(
         "invoices/list.html", {"request": request, "invoices": invoices}
     )
@@ -59,10 +65,15 @@ def invoices_list(
 def new_invoice(
     request: Request,
     db: Session = Depends(get_db),
+    user = Depends(get_current_user)
 ):
     invoice = Invoice.empty()
 
-    companies = db.query(Company).all()
+    query = db.query(Company)
+    if(not user.admin):
+        query = db.query(Company).filter(Company.caller_id == user.caller_id)
+    companies = query.all()
+
 
     return templates.TemplateResponse(
         "invoices/edit.html", {"request": request, "invoice": invoice, "editable": True, "companies": companies}
@@ -88,10 +99,11 @@ def invoice_detail(
         raise HTTPException(status_code=404, detail="invoice not found")
 
 
-    # Get current user
-    current_user = get_current_user(request, db)
-#    companies = db.query(Companies).filter(Customer.caller_id == current_user.caller_id).all()
-    companies = db.query(Company).filter().all()
+    query = db.query(Company)
+    if(not user.admin):
+        query = db.query(Company).filter(Company.caller_id == user.caller_id)
+    companies = query.all()
+
 
 
     # Invoice company data for testing
@@ -251,6 +263,7 @@ async def upsert_invoice(
             raise HTTPException(status_code=404, detail="invoice not found")
     else:
         invoice = Invoice()
+        invoice.caller_id = user.caller_id
 
 
     data_dict = update_data.model_dump(exclude_unset=True)
@@ -289,7 +302,12 @@ async def upsert_invoice(
     db.refresh(invoice)
 
     # Render updated list (HTMX swap)
-    invoices = db.query(Invoice).all()
+    query = db.query(Company)
+    if(not user.admin):
+        query = db.query(Company).filter(Company.caller_id == user.caller_id)
+    companies = query.all()
+
+
     response = templates.TemplateResponse(
         "invoices/list.html",
         {"request": request, "invoices": invoices},

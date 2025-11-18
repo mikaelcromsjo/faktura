@@ -12,6 +12,7 @@
                     <th class="px-2 py-1 border">{{ "Note" | t }}</th>
                     <th class="px-2 py-1 border">{{ "Company" | t }}</th>
                     <th class="px-2 py-1 border">{{ "Status" | t }}</th>
+                    <th x-show="is_admin" class="px-2 py-1 border">{{ "User" | t }}</th>
                     <th class="px-2 py-1 border">{{ "Commands" | t }}</th>
                 </tr>
             </thead>
@@ -46,6 +47,7 @@
                     {% endif %}
                     
                     <td class="px-2 py-1 border">{{ status }}</td>
+                    <td x-show="is_admin" class="px-2 py-1 border">{{ invoice.caller.name }}</td>
 
                <td class="px-2 py-1 border text-center" 
                         @click.stop

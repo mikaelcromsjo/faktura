@@ -29,11 +29,13 @@ class Company(BaseMixin, Base):
     __tablename__ = "companies"
 
     id = Column(Integer, primary_key=True, index=True)
+
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     caller_id = Column(Integer, ForeignKey("callers.id"), nullable=True)
+    caller = relationship("Caller")
     comment = Column(String, nullable=True)
     extra = Column(MutableDict.as_mutable(JSON), default=dict)
 
@@ -65,6 +67,8 @@ class Invoice(BaseMixin, Base):
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
     # Relationship to customer
     company = relationship("Company")
+    caller_id = Column(Integer, ForeignKey("callers.id"), nullable=True)
+    caller = relationship("Caller")
 
     date = Column(DateTime, nullable=True)
     extra = Column(MutableDict.as_mutable(JSON), default=dict)    

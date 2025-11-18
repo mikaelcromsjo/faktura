@@ -18,6 +18,7 @@ from models.models import Company, CompanyUpdate, Caller
 from core.functions.helpers import populate, build_filters
 
 from models.models import Update
+from core.auth import get_current_user
 
 
 # -------------------------------------------------
@@ -32,10 +33,13 @@ router = APIRouter(prefix="/companies", tags=["companies"])
 @router.get("/", response_class=HTMLResponse, name="companies_list")
 def companies_list(
     request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user)
 ):
 
     query = db.query(Company)
+    if(not user.admin):
+        query = db.query(Company).filter(Company.caller_id == user.caller_id)
     companies = query.all()
 
     return render(
@@ -81,6 +85,7 @@ async def upsert_company(
     request: Request,
     update_data: Update,
     db: Session = Depends(get_db),
+    user = Depends(get_current_user)
 ):
 
     # Determine if this is an update or create
@@ -95,6 +100,7 @@ async def upsert_company(
             raise HTTPException(status_code=404, detail="Company not found")
     else:
         data_record = Company()
+        data_record.caller_id = user.caller_id
 
     data_dict = update_data.model_dump()
 
@@ -131,7 +137,13 @@ async def upsert_company(
     db.refresh(data_record)
 
     # Render updated list (HTMX swap)
-    companies = db.query(Company).all()
+    query = db.query(Company)
+    if(not user.admin):
+        query = db.query(Company).filter(Company.caller_id == user.caller_id)
+    companies = query.all()
+
+
+
     response =  templates.TemplateResponse(
         "companies/list.html",
         {
