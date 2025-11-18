@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ "Dashboard" | t }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/css/tailwind.css">
+
+
+    <!-- HTMX and Alpine.js from /static -->
+    <script src="/static/htmx.min.js"></script>
+    <script src="/static/alpine.min.js" defer></script>
+
+
+</head>
+
+<body class="flex flex-col">
+    <!-- Header -->
+ <div>
+
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto p-4 w-full">
+        <!-- Content -->
+        <div id="content" x-show="active === 'customers'" class="p-4">
+            {% block content %}{% endblock %}
+        </div>
+
+    </main>
+</div>
+
+    <script src="/static/js/json-enc.js"></script>
+
+<meta name="htmx-history-cache-size" content="0">

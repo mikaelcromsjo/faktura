@@ -1,0 +1,17 @@
+
+services:
+  app:
+    build: .
+    container_name: faktura
+    ports:
+      - "8020:8020"
+    volumes:
+      - ./backend:/app/backend
+      - ./scripts:/app/scripts
+      - faktura_db:/dbdata
+    environment:
+      - DATABASE_URL=sqlite:////dbdata/app.db
+    command: uvicorn main:app --host 0.0.0.0 --port 8020 --reload
+
+volumes:
+  faktura_db:

@@ -1,0 +1,96 @@
+
+<div id="invoice-container">
+    <div id="invoice-list">
+            <div class="full-table">
+
+        <table class="table-auto w-full border overflow-x-auto">
+            <thead>
+                <tr>
+                    <th class="px-2 py-1 border">{{ "Invoice ID" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Invoice Number" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Date" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Note" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Company" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Status" | t }}</th>
+                    <th class="px-2 py-1 border">{{ "Commands" | t }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                <tr hx-get="{{ url_for('invoice_detail', invoice_id=invoice.id) }}?list=short" 
+                    hx-target="#invoice-info"
+                    hx-trigger="click"
+                    :class="{
+                            'bg-blue-100 font-bold hover:bg-blue-200 text-blue-600': selectedRow === {{ loop.index }},
+                            'bg-white hover:bg-gray-100 text-gray-900': selectedRow != {{ loop.index }}
+                        }"
+                    class="cursor-pointer"
+                    @click="selectedRow = {{ loop.index  }}"
+                    >
+                    
+                    <td class="px-2 py-1 border">{{ invoice.id }}</td>
+                    <td class="px-2 py-1 border">{{ invoice.number }}</td>
+                    <td class="px-2 py-1 border">{{ invoice.date.strftime('%Y-%m-%d')  }}</td>
+                    <td class="px-2 py-1 border">{{ invoice.note }}</td>
+                    <td class="px-2 py-1 border">
+                    {{ invoice.company.extra.company_name if invoice.company else '' }} </td>  
+
+                    {% set status = '' %}
+
+                    {% if invoice.extra.status == '1' %}
+                        {% set status = "Processing" | t %}
+                    {% elif invoice.extra.status == '2' %}
+                        {% set status = "OK" | t %}
+                    {% elif invoice.extra.status == '3' %}
+                        {% set status = "Canceled" | t %}
+                    {% endif %}
+                    
+                    <td class="px-2 py-1 border">{{ status }}</td>
+
+               <td class="px-2 py-1 border text-center" 
+                        @click.stop
+                        >
+
+                        <button x-show="{{invoice.extra.status}} == '1' || {{invoice.extra.status}} == '2' && {{ is_admin }} > 0"
+"
+                            hx-get="{{ url_for('invoice_detail', invoice_id=invoice.id) }}"
+                            hx-target="#modal-container"
+                            hx-swap="innerHTML"
+                            @click="$store.modal.open = true"
+                        >
+                            {{ "Edit" | t }}
+                        </button>                
+                        
+                        <button x-show="{{invoice.extra.status}} == '1'"
+                            hx-post="{{ url_for('delete_invoice', invoice_id=invoice.id) }}"
+                            hx-on="htmx:afterRequest: showPopup(event); htmx.ajax('GET', '{{ url_for('invoices_list') }}', {target:'#invoice-container'});"
+                            hx-trigger="confirmed"
+                            x-confirm="{{'Are you sure you want to delete this record?' | t }}"
+                        >
+                            {{ "Delete" | t }}
+                        </button>
+<button x-show="{{invoice.extra.status}} == '2'" @click="window.open('{{ url_for('invoice_detail', invoice_id=invoice.id) }}?list=pdf', '_blank')">
+    {{ "PDF" | t }}
+</button>      
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            </div>
+        <div class="mt-2 flex gap-2">
+
+            <button hx-get="/invoices/new" 
+                    hx-target="#modal-container"
+                    @click="$store.modal.open = true"
+
+                class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
+                {{ "New invoice" | t }}
+            </button>
+        </div>
+    </div>
+    <div class="mt-4" id="invoice-info">
+    </div>
+</div>

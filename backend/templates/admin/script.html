@@ -1,0 +1,51 @@
+<h1 class="text-2xl font-bold mb-6">Adminscript</h1>
+
+<div class="grid grid-cols-2 gap-6">
+  <!-- Left: Script form -->
+  <form 
+      hx-post="/admin/script"
+      hx-target="#admin_content"
+      hx-swap="innerHTML"
+      class="bg-white p-4 rounded-xl shadow-md space-y-4"
+  >
+    <!-- Script selection -->
+    <div>
+      <label class="block font-semibold mb-1">Script:</label>
+      <select id="script-select" name="script_name" class="border rounded p-2 w-full">
+        {% for key, path in scripts.items() %}
+          <option value="{{ key }}">{{ key }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Arguments input -->
+    <div>
+      <label class="block font-semibold mb-1">Argument:</label>
+      <input 
+        type="text" 
+        name="args" 
+        placeholder="Enter arguments..." 
+        class="border rounded p-2 w-full" 
+      />
+    </div>
+
+    <!-- Submit -->
+    <button class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
+      Kör
+    </button>
+  </form>
+
+  <!-- Right: Examples panel -->
+  <div class="bg-white p-4 rounded-xl shadow-md space-y-2">
+    <label class="block font-semibold mb-2">Exempel:</label>
+    <div id="examples-container" class="bg-gray-50 border rounded p-2 max-h-56 overflow-y-auto font-mono text-sm">
+      {% for script_name, examples in script_examples.items() %}
+        <div class="mb-2">
+          <strong>{{ script_name }}</strong>
+          <ul class="ml-4 list-disc">
+            {% for arg in examples %}
+              <li>{{ arg | safe }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}

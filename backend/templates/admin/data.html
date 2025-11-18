@@ -1,0 +1,39 @@
+    <div id="admin_data-container">
+
+<h2>🗂 Data Administration</h2>
+<br>
+<br>
+
+  <form
+    hx-post="{{ url_for('admin_data') }}"
+    hx-target="#admin_data-container"
+    hx-swap="outerHTML"
+  >
+    <div id="data-container" class="space-y-4">
+      <div class="mb-3">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Categories JSON</label>
+        <textarea
+          
+          name="categories_text"
+          rows="10"
+          class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-gray-800 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        >{{ categories_json }}</textarea>
+      </div>
+
+
+<button
+  type="submit"
+  class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+>
+ {{ "Save" | t }}
+</button>    </div>
+  </form>
+<br>
+
+{% if message %}
+<div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-md" role="alert">
+  {{ message }}
+</div>  
+{% endif %}
+
+    </div>
