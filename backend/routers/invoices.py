@@ -302,11 +302,10 @@ async def upsert_invoice(
     db.refresh(invoice)
 
     # Render updated list (HTMX swap)
-    query = db.query(Company)
+    query = db.query(Invoice)
     if(not user.admin):
-        query = db.query(Company).filter(Company.caller_id == user.caller_id)
+        query = db.query(Invoice).filter(Invoice.caller_id == user.caller_id)
     invoices = query.all()
-
 
     response = templates.TemplateResponse(
         "invoices/list.html",

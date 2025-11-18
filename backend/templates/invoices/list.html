@@ -31,7 +31,7 @@
                     
                     <td class="px-2 py-1 border">{{ invoice.id }}</td>
                     <td class="px-2 py-1 border">{{ invoice.number }}</td>
-                    <td class="px-2 py-1 border">{{ invoice.date.strftime('%Y-%m-%d') or ''  }}</td>
+                    <td class="px-2 py-1 border">{{ invoice.date.strftime('%Y-%m-%d') }}</td>
                     <td class="px-2 py-1 border">{{ invoice.note }}</td>
                     <td class="px-2 py-1 border">
                     {{ invoice.company.extra.company_name if invoice.company else '' }} </td>  
