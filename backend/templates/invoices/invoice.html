@@ -116,7 +116,7 @@
       </td>
       <td style="vertical-align: top; padding: 5px; text-align: right;">
         {% if invoice_data.bankgiro %}Bankgiro: {{ invoice_data.bankgiro }}<br>{% endif %}
-        {% if invoice_data.plusgiro %}-Plusgiro: {{ invoice_data.plusgiro }}<br>{% endif %}
+        {% if invoice_data.plusgiro %}Plusgiro: {{ invoice_data.plusgiro }}<br>{% endif %}
         {% if invoice_data.footer %}{{ invoice_data.footer }}<br>{% endif %}
         {% if invoice.extra.reference %}Reference: {{ invoice.extra.reference }}<br>{% endif %}
       </td>
