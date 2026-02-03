@@ -202,10 +202,6 @@ def company_detail(
                 "request": request, 
                 "company": company, 
                 "company_id": company_id, 
-                "categories_map": constants.categories_map,
-                "organisations_map": constants.organisations_map, 
-                "filters_map": constants.filters_map, 
-                "personalities_map": constants.personalities_map, 
                 "callers": callers,
             }
         )

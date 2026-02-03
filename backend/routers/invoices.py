@@ -53,7 +53,7 @@ def invoices_list(
 
 
     return templates.TemplateResponse(
-        "invoices/list.html", {"request": request, "invoices": invoices}
+        "invoices/list.html", {"request": request, "invoices": invoices, "is_admin": getattr(user, "admin", False),}
     )
 
 
@@ -121,6 +121,7 @@ def invoice_detail(
         "bankgiro": "bg-43345678",
         "plusgiro": "pg-43345678",
         "note": "",
+        "footer": "Reverse Charge",
         
     }
 
@@ -213,7 +214,42 @@ def invoice_detail(
             "invoices/edit.html", {"request": request, "invoice": invoice, "editable": True, "companies": companies, "is_admin": user.admin }
         )
      
-
+def remove_zero_rows(extra: dict) -> dict:
+    if not isinstance(extra, dict):
+        return extra
+    
+    rows = {}
+    keys_to_remove = []
+    
+    # Parse rows into dicts (reuse your logic)
+    for key, value in extra.items():
+        if key.startswith("row."):
+            parts = key.split(".")
+            if len(parts) == 3:
+                _, rownum, field = parts
+                rows.setdefault(rownum, {})[field] = value
+                keys_to_remove.append(key)
+    
+    # Filter: keep row only if BOTH price AND qty are non-zero/non-empty
+    filtered_rows = {}
+    for rownum, rowdata in rows.items():
+        price = rowdata.get('price', '')
+        qty = rowdata.get('qty', '')
+        p_zero = str(price).strip() in ('', '0')
+        q_zero = str(qty).strip() in ('', '0')
+        if not (p_zero or q_zero):  # Keep if neither is zero
+            filtered_rows[rownum] = rowdata
+    
+    # Remove flat keys
+    for key in keys_to_remove:
+        extra.pop(key, None)
+    
+    # Put back filtered rows as flat keys (for normalize_extra_rows)
+    for rownum, rowdata in filtered_rows.items():
+        for field, value in rowdata.items():
+            extra[f"row.{rownum}.{field}"] = value
+    
+    return extra
 
 def normalize_extra_rows(extra: dict) -> dict:
 
@@ -279,6 +315,7 @@ async def upsert_invoice(
             print("value", field_name, value)
             del data_dict[key]  # optionally clean up the flat key
 
+    data_dict['extra'] = remove_zero_rows(data_dict['extra'])
     data_dict['extra'] = normalize_extra_rows(data_dict['extra'])
 
     # Populate DB model dynamically

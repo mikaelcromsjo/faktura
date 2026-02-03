@@ -696,88 +696,6 @@
 
 
 
-  <script>
-    let ws;
-    let wsToken;
-    const nameEl = document.querySelector("#name");
-    const numberEl = document.querySelector("#number");
-    const callHref = document.querySelector("#call_href");
-
-    async function fetchToken() {
-      const res = await fetch(`${location.protocol}//${location.host}/get-ws-token`, {
-        credentials: "include"
-      });
-      const data = await res.json();
-      wsToken = data.ws_token;
-    }
-
-    function createWebSocket(url) {
-      return new Promise((resolve, reject) => {
-        const socket = new WebSocket(url);
-
-        socket.onopen = () => resolve(socket);
-        socket.onerror = () => reject(new Error(`Cannot connect via ${url}`));
-      });
-    }
-
-    async function connectWS() {
-      await fetchToken();
-
-      const protocols = ["wss", "ws"];
-      let connected = false;
-
-      for (let proto of protocols) {
-        const url = `${proto}://${location.host}/calls/ws?token=${wsToken}`;
-        try {
-          ws = await createWebSocket(url);
-          console.log(`WebSocket connected via ${proto}!`);
-          connected = true;
-
-
-          ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log("Recieved", data)
-            if (data.call) {
-              enableCall();
-            }
-            if (data.type === 'alarm') {
-              const message = `${data.customer}: ${data.note || "Alarm"}`;
-              window.dispatchEvent(new CustomEvent("show-alert", { detail: message }));
-            }
-
-          };
-
-          // Handle close
-          ws.onclose = () => {
-            console.log(`WebSocket (${proto}) closed. Reconnecting in 1s...`);
-            setTimeout(connectWS, 1000);
-          };
-
-          // Ping
-          setInterval(() => {
-            if (ws.readyState === WebSocket.OPEN) {
-              ws.send(JSON.stringify({ type: "ping" }));
-            }
-          }, 10000);
-
-          break; // exit loop once connected
-        } catch (err) {
-          console.warn(`${proto} connection failed, trying next...`);
-        }
-      }
-
-      if (!connected) {
-        console.error("Failed to connect via both WSS and WS. Retrying in 5s...");
-        setTimeout(connectWS, 5000);
-      }
-    }
-
-
-    // Start automatically
-    connectWS();
-  </script>
-
-
   <script defer>
 
     document.addEventListener('alpine:init', () => {
@@ -1094,3 +1012,4 @@ if (visibleIds.length === 0) {
     }
 });
 </script>
+

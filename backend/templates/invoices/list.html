@@ -3,7 +3,7 @@
     <div id="invoice-list">
             <div class="full-table">
 
-        <table class="table-auto w-full border overflow-x-auto">
+        <table class="table-auto w-full border overflow-x-auto" x-data="{ selectedRow: 0 }">
             <thead>
                 <tr>
                     <th class="px-2 py-1 border">{{ "Invoice ID" | t }}</th>
@@ -16,13 +16,14 @@
                     <th class="px-2 py-1 border">{{ "Commands" | t }}</th>
                 </tr>
             </thead>
+            <div>
             <tbody>
                 {% for invoice in invoices %}
                 <tr hx-get="{{ url_for('invoice_detail', invoice_id=invoice.id) }}?list=short" 
                     hx-target="#invoice-info"
                     hx-trigger="click"
                     :class="{
-                            'bg-blue-100 font-bold hover:bg-blue-200 text-blue-600': selectedRow === {{ loop.index }},
+                            'bg-blue-100 font-bold hover:bg-blue-200 text-blue-600': selectedRow == {{ loop.index }},
                             'bg-white hover:bg-gray-100 text-gray-900': selectedRow != {{ loop.index }}
                         }"
                     class="cursor-pointer"
@@ -80,6 +81,7 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            </div>
         </table>
             </div>
         <div class="mt-2 flex gap-2">

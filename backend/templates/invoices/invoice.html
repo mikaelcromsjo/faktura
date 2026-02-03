@@ -55,10 +55,10 @@
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
     <thead>
       <tr>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">Description</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">Price</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">Quantity</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">Total</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">{{ Description }}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Price }}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Quantity }}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Total }}</th>
       </tr>
     </thead>
     <tbody>
@@ -116,7 +116,8 @@
       </td>
       <td style="vertical-align: top; padding: 5px; text-align: right;">
         {% if invoice_data.bankgiro %}Bankgiro: {{ invoice_data.bankgiro }}<br>{% endif %}
-        {% if invoice_data.plusgiro %}Plusgiro: {{ invoice_data.plusgiro }}<br>{% endif %}
+        {% if invoice_data.plusgiro %}-Plusgiro: {{ invoice_data.plusgiro }}<br>{% endif %}
+        {% if invoice_data.footer %}{{ invoice_data.footer }}<br>{% endif %}
         {% if invoice.extra.reference %}Reference: {{ invoice.extra.reference }}<br>{% endif %}
       </td>
     </tr>
