@@ -1,5 +1,5 @@
-<div id="caller-container">
-    <div id="caller-list">
+<div id="callers-container">
+    <div id="callers-list">
 
         <div class="full-table">
             <table class="table-auto w-full border overflow-x-auto">
@@ -15,7 +15,7 @@
                 <tbody>
                     {% for caller in callers %}
                     <tr hx-get="{{ url_for('caller_detail', caller_id=caller.id) }}?list=short"
-                        hx-target="#caller-info"
+                        hx-target="#callers-info"
                         hx-trigger="click"
                         class="cursor-pointer hover:bg-gray-100">
 
@@ -40,7 +40,7 @@
                                 hx-post="{{ url_for('delete_caller', caller_id=caller.id) }}"
                                 hx-on="htmx:afterRequest: 
                                     showPopup(event);
-                                    htmx.ajax('GET', '{{ url_for('callers_list') }}', {target:'#caller-container'}); "
+                                    htmx.ajax('GET', '{{ url_for('callers_list') }}', {target:'#callers-container'}); "
                                 hx-trigger="confirmed"
                                 x-confirm="{{'Are you sure you want to delete this record?' | t }}"
                             >
@@ -62,7 +62,7 @@
             </button>
         </div>
         
-        <div class="mt-4" id="caller-info"></div>
+        <div class="mt-4" id="callers-info"></div>
         
     </div>
 </div>

@@ -247,13 +247,18 @@
           <template x-ref="navButtons">
 
 
-            <button @click="
+            <button 
+            x-show="!is_admin";
+            @click="
             active = 'user';
+            
           " :class="{'bg-gray-200': active === 'user'}" class="px-3 py-2 rounded hover:bg-gray-200">
               {{ "User" | t }}
             </button>
 
-                        <button @click="
+                        <button 
+            x-show="is_admin";
+            @click="
             active = 'users';
           " :class="{'bg-gray-200': active === 'users'}" class="px-3 py-2 rounded hover:bg-gray-200">
               {{ "Users" | t }}

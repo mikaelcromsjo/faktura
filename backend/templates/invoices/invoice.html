@@ -1,15 +1,15 @@
 <div class="content" style="width: 600px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 12px; color: #333;">
 
   <!-- Invoice Title -->
-  <h1 style="margin-bottom: 20px;">Invoice</h1>
+  <h1 style="margin-bottom: 20px;margin-top:90px">{{ "Invoice" | t }}</h1>
 
   <!-- Invoice Details -->
   <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
     <tr>
       <td style="vertical-align: top; padding: 5px;">
-        <strong>Invoice #:</strong> {{ invoice.number }}<br>
-        <strong>Invoice Date:</strong> {{ invoice.date.strftime('%Y-%m-%d') if invoice.date else '' }}<br>
-        <strong>Due Date:</strong> {{ invoice.extra.due_date if invoice.extra.due_date else '' }}<br>
+        <strong>{{ "Invoice" | t }} #:</strong> {{ invoice.number }}<br>
+        <strong>{{ "Invoice Date" | t }}:</strong> {{ invoice.date.strftime('%Y-%m-%d') if invoice.date else '' }}<br>
+        <strong>{{ "Due Date" | t }}:</strong> {{ invoice.extra.due_date if invoice.extra.due_date else '' }}<br>
         {% if invoice.extra.reference %}
         <strong>Reference:</strong> {{ invoice.extra.reference }}<br>
         {% endif %}
@@ -44,7 +44,7 @@
         {{ invoice.company.extra.address_line2 }}<br>
         {{ invoice.company.extra.postal_code }} {{ invoice.company.extra.postal_address }}<br>
         {{ invoice.company.extra.country }}<br>
-        <strong>VAT:</strong> {{ invoice.company.extra.org_nr }}
+        <strong>{{ "VAT" |t }} :</strong> {{ invoice.company.extra.org_nr }}
       </td>
     </tr>
   </table>
@@ -55,10 +55,10 @@
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
     <thead>
       <tr>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">{{ Description }}</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Price }}</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Quantity }}</th>
-        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ Total }}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">{{ "Description" | t}}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ "Price" | t}}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ "Quantity" | t }}</th>
+        <th style="border: 1px solid #ccc; padding: 5px; text-align: right;">{{ "Total" | t }}</th>
       </tr>
     </thead>
     <tbody>
@@ -79,7 +79,7 @@
       {% set vat_rate = (invoice.extra.vat | float(0)) / 100 %}
       {% set vat_amount = ns.subtotal * vat_rate %}
       <tr>
-        <td colspan="3" style="padding: 5px; text-align: right;">Subtotal</td>
+        <td colspan="3" style="padding: 5px; text-align: right;">{{ "Subtotal" |t }}</td>
         <td style="padding: 5px; text-align: right;">{{ "%.2f"|format(ns.subtotal) }}</td>
       </tr>
       <tr>
@@ -87,7 +87,7 @@
         <td style="padding: 5px; text-align: right;">{{ "%.2f"|format(vat_amount) }}</td>
       </tr>
       <tr>
-        <td colspan="3" style="padding: 5px; text-align: right;"><strong>Total</strong></td>
+        <td colspan="3" style="padding: 5px; text-align: right;"><strong>{{ "Total" | t }}</strong></td>
         <td style="padding: 5px; text-align: right;"><strong>{{ "%.2f"|format(ns.subtotal + vat_amount) }} {{ invoice.extra.currency }}</strong></td>
       </tr>
     </tfoot>

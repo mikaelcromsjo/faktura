@@ -23,7 +23,7 @@ from templates import templates
 from core.database import engine
 from core.models.base import Base
 from models.models import Invoice, InvoiceUpdate, InvoiceNumber
-from models.models import Update, Company
+from models.models import Update, Company, Caller
 from core.functions.helpers import populate
 from core.auth import get_current_user
 from datetime import date
@@ -90,41 +90,39 @@ def invoice_detail(
     db: Session = Depends(get_db),
     user = Depends(get_current_user),
 ):
-    
-    # Capture all query parameters as a dict
     query_params = dict(request.query_params)
 
     invoice = db.get(Invoice, invoice_id)
     if not invoice:
         raise HTTPException(status_code=404, detail="invoice not found")
 
-
     query = db.query(Company)
-    if(not user.admin):
+    if not user.admin:
         query = db.query(Company).filter(Company.caller_id == user.caller_id)
     companies = query.all()
 
+    # Load invoice data from current user's caller (account)
+    caller = db.get(Caller, user.caller_id)
+    if not caller:
+        raise HTTPException(status_code=404, detail="Caller not found for current user")
 
-
-    # Invoice company data for testing
+    extra = caller.extra or {}
     invoice_data = {
-        "name": "My Company AB",
-        "address_line1": "Company Street 1",
-        "address_line2": "Suite 100",
-        "postal_code": "54321",
-        "postal_address": "Berga",
-        "country": "Sweden",
-        "vat_number": "SE9876543210",
-        "bank_name": "banknamn",
-        "iban": "345678",
-        "bic": "43345678",
-        "bankgiro": "bg-43345678",
-        "plusgiro": "pg-43345678",
-        "note": "",
-        "footer": "Reverse Charge",
-        
+        "name":           caller.name,
+        "address_line1":  extra.get("address_line1", ""),
+        "address_line2":  extra.get("address_line2", ""),
+        "postal_code":    extra.get("postal_code", ""),
+        "postal_address": extra.get("postal_address", ""),
+        "country":        extra.get("country", ""),
+        "vat_number":     extra.get("vat_number", ""),
+        "bank_name":      extra.get("bank_name", ""),
+        "iban":           extra.get("iban", ""),
+        "bic":            extra.get("bic", ""),
+        "bankgiro":       extra.get("bankgiro", ""),
+        "plusgiro":       extra.get("plusgiro", ""),
+        "note":           extra.get("note", ""),
+        "footer":         "Reverse Charge"
     }
-
 
     if list == "short":
         # Render short template
