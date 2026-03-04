@@ -1,0 +1,43 @@
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-lg font-sans text-gray-800">
+    <h1 class="text-xl font-bold mb-4">{{ "Account" | t }}: {{ caller.name }}</h1>
+
+    <!-- Account Details -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="space-y-1">
+            <p><strong>{{ "ID" | t }}:</strong> {{ caller.id }}</p>
+            {% if caller.extra.comment %}
+            <p><strong>{{ "Comment" | t }}:</strong> {{ caller.extra.comment }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Account Extra Details -->
+    {% if caller.extra %}
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "Banking Details" | t }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+            {% if caller.extra.bank_name %}
+            <p><strong>{{ "Bank Name" | t }}:</strong> {{ caller.extra.bank_name }}</p>
+            {% endif %}
+            {% if caller.extra.iban %}
+            <p><strong>{{ "IBAN" | t }}:</strong> {{ caller.extra.iban }}</p>
+            {% endif %}
+            {% if caller.extra.bic %}
+            <p><strong>{{ "BIC" | t }}:</strong> {{ caller.extra.bic }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Extra Fields -->
+    {% if caller.extra %}
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold mb-2">{{ "Extra" | t }}</h4>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            {% for key, value in caller.extra.items() if key not in ['bank_name', 'iban', 'bic'] %}
+            <p><strong>{{ key.replace('_', ' ').title() | t }}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>

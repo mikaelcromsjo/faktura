@@ -11,18 +11,15 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from core.database import SessionLocal
-from models.models import Caller, Customer, Call, Product, ProductCustomer
+from models.models import Base
 from core.models.models import User
 
-# Map class names to actual classes
+# Build a name → class lookup from all mapped models
 MODEL_MAP = {
-    "Caller": Caller,
-    "Customer": Customer,
-    "Call": Call,
-    "Product": Product,
-    "ProductCustomer": ProductCustomer,
-    "User": User
+    mapper.class_.__name__.lower(): mapper.class_
+    for mapper in Base.registry.mappers
 }
+
 
 def print_schema(cls):
     print(f"Schema for {cls.__name__}:")

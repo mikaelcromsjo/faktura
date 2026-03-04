@@ -28,8 +28,7 @@ from core.auth import get_current_user
 router = APIRouter(prefix="/user", tags=["user"])
 
 # -------------------------------------------------
-# List Customers
-# Returns an HTMX fragment with list.html
+
 # -------------------------------------------------
 @router.get("/", response_class=HTMLResponse, name="user")
 def user(

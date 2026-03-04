@@ -1,0 +1,63 @@
+<div x-init="$store.modal.title = '{{ "Account" | t }}: {{ caller.name }}'"></div> 
+<div x-init="$store.modal.submit = '{{ "Save" | t }}'"></div> 
+
+<form
+    hx-post="{{ url_for('upsert_caller') }}"
+    hx-target="#caller-list"
+    hx-swap="innerHTML"
+    hx-ext="json-enc"
+    hx-headers='{"Content-Type": "application/json"}'
+    x-init="
+        $el.addEventListener('htmx:afterRequest', (event) => {
+            if (event.detail.xhr.status === 200) {
+                $store.modal.open = false;
+            } else if (event.detail.xhr.status >= 400) {
+                showPopup(event);
+            }
+        })
+    "
+>
+
+    {% if caller.id %}
+    <!-- ID -->
+    <div class="mb-2 hidden">
+        <label class="block font-semibold">{{ "ID" | t }}</label>
+        <input type="text" name="id" value="{{ caller.id }}" class="border p-1 w-full"/>
+    </div>
+    {% endif %}
+
+    <!-- Account Name -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Account Name' | t }}:*</label>
+        <input required type="text" name="name" value="{{ caller.name or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Bank Name -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Bank Name' | t }}</label>
+        <input type="text" name="extra.bank_name" value="{{ caller.extra.bank_name or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- IBAN -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'IBAN' | t }}</label>
+        <input type="text" name="extra.iban" value="{{ caller.extra.iban or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- BIC -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'BIC' | t }}</label>
+        <input type="text" name="extra.bic" value="{{ caller.extra.bic or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Comment -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ "Comment" | t }}</label>
+        <textarea name="extra.comment" class="border p-1 w-full">{{ caller.extra.comment or '' }}</textarea>
+    </div>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded">{{ "Save" | t }}</button>
+    </div>
+
+</form>

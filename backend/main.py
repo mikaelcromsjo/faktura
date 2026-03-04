@@ -2,6 +2,7 @@
 
 from starlette.middleware.base import BaseHTTPMiddleware
 
+#from backend.routers import user
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -88,9 +89,9 @@ async def alarm_scheduler():
                 caller_id = alarm.caller_id
                 users = db.query(User).filter(User.caller_id == caller_id).all()
 
-                for user in users:
+                for _user in users:
 
-                    if not user:
+                    if not _user:
                         continue
                 
                     logger.info("✅ Send Alarm.")
@@ -102,13 +103,13 @@ async def alarm_scheduler():
                         "date": alarm.date.isoformat(),
                     }
 
-                    for ws in active_connections.get(str(user.id), []):
+                    for ws in active_connections.get(str(_user.id), []):
                         try:
                             await ws.send_json(payload)
                             alarm.reminder_sent = now
                             db.commit()
                         except Exception as e:
-                            print(f"WebSocket send failed for {user.id}: {e}")
+                            print(f"WebSocket send failed for {_user.id}: {e}")
 
 
         except Exception as e:
@@ -239,12 +240,14 @@ from state import user_data, active_connections
 # --- Routers ---
 # Routers should be defined in /routers/*.py and included here.
 # Each router file exposes a "router" object.
-from routers import user, invoices, companies, admin
+from routers import invoices, companies, admin, callers, users, user
 
 app.include_router(user.router, tags=["user"])
+app.include_router(users.router, tags=["users"])
 app.include_router(invoices.router, tags=["invoices"])
 app.include_router(companies.router, tags=["companies"])
 app.include_router(admin.router, tags=["admin"])
+app.include_router(callers.router, tags=["callers"])
 
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import RedirectResponse
@@ -406,6 +409,7 @@ async def read_root(request: Request, user: str = Depends(get_current_user)):
     Render the base page with a placeholder container.
     HTMX will dynamically swap content into this container.
     """
+    
     return templates.TemplateResponse(
         "base.html",
         {

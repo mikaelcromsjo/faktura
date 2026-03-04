@@ -1,0 +1,58 @@
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-lg font-sans text-gray-800">
+    <h1 class="text-xl font-bold mb-4">{{ "Company" | t }}: {{ company.first_name }} {{ company.last_name }}</h1>
+
+    <!-- Company Contact Details -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="space-y-1">
+            <p><strong>{{ "ID" | t }}:</strong> {{ company.id }}</p>
+            <p><strong>{{ "Email" | t }}:</strong> {{ company.email or '' }}</p>
+            <p><strong>{{ "Phone" | t }}:</strong> {{ company.phone or '' }}</p>
+            {% if company.caller %}
+            <p><strong>{{ "Caller" | t }}:</strong> {{ company.caller.name }}</p>
+            {% endif %}
+            {% if company.comment %}
+            <p><strong>{{ "Comment" | t }}:</strong> {{ company.comment }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Company Address & Org Details -->
+    {% if company.extra %}
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "Company Details" | t }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+            {% if company.extra.company_name %}
+            <p><strong>{{ "Company Name" | t }}:</strong> {{ company.extra.company_name }}</p>
+            {% endif %}
+            {% if company.extra.org_nr %}
+            <p><strong>{{ "Organization Number" | t }}:</strong> {{ company.extra.org_nr }}</p>
+            {% endif %}
+            {% if company.extra.address_line1 %}
+            <p><strong>{{ "Address Line 1" | t }}:</strong> {{ company.extra.address_line1 }}</p>
+            {% endif %}
+            {% if company.extra.address_line2 %}
+            <p>{{ company.extra.address_line2 }}</p>
+            {% endif %}
+            {% if company.extra.postal_code or company.extra.postal_address %}
+            <p><strong>{{ "Postal" | t }}:</strong> {{ company.extra.postal_code or '' }} {{ company.extra.postal_address or '' }}</p>
+            {% endif %}
+            {% if company.extra.country %}
+            <p><strong>{{ "Country" | t }}:</strong> {{ company.extra.country }}</p>
+            {% endif %}
+            {% if company.extra.cc_email %}
+            <p><strong>{{ "CC Email" | t }}:</strong> {{ company.extra.cc_email }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Extra Fields -->
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold mb-2">{{ "Extra" | t }}</h4>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            {% for key, value in company.extra.items() if key not in ['company_name', 'org_nr', 'address_line1', 'address_line2', 'postal_code', 'postal_address', 'country', 'cc_email'] %}
+            <p><strong>{{ key.replace('_', ' ').title() | t }}:</strong> {{ value }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>

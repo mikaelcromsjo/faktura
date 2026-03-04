@@ -1,0 +1,70 @@
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-lg font-sans text-gray-800">
+    <h1 class="text-xl font-bold mb-4">{{ "User" | t }}: {{ user.username }}</h1>
+
+    <!-- Account Details -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="space-y-1">
+            <p><strong>{{ "ID" | t }}:</strong> {{ user.id }}</p>
+            <p><strong>{{ "Admin" | t }}:</strong> {{ "Yes" | t if user.admin else "No" | t }}</p>
+            {% if user.caller %}
+            <p><strong>{{ "Caller" | t }}:</strong> {{ user.caller.name }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- User Information -->
+    {% if user.extra %}
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "User Information" | t }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+            {% if user.extra.first_name or user.extra.last_name %}
+            <p><strong>{{ "Name" | t }}:</strong> {{ user.extra.first_name or '' }} {{ user.extra.last_name or '' }}</p>
+            {% endif %}
+            {% if user.extra.address %}
+            <p><strong>{{ "Address" | t }}:</strong> {{ user.extra.address }}</p>
+            {% endif %}
+            {% if user.extra.email %}
+            <p><strong>{{ "Email" | t }}:</strong> {{ user.extra.email }}</p>
+            {% endif %}
+            {% if user.extra.cc_email %}
+            <p><strong>{{ "CC Email" | t }}:</strong> {{ user.extra.cc_email }}</p>
+            {% endif %}
+            {% if user.extra.phone %}
+            <p><strong>{{ "Phone" | t }}:</strong> {{ user.extra.phone }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bank Information -->
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "Bank Information" | t }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+            {% if user.extra.bank_name %}
+            <p><strong>{{ "Bank Name" | t }}:</strong> {{ user.extra.bank_name }}</p>
+            {% endif %}
+            {% if user.extra.swift_bic %}
+            <p><strong>{{ "SWIFT / BIC" | t }}:</strong> {{ user.extra.swift_bic }}</p>
+            {% endif %}
+            {% if user.extra.account_holder %}
+            <p><strong>{{ "Account Holder" | t }}:</strong> {{ user.extra.account_holder }}</p>
+            {% endif %}
+            {% if user.extra.account_number %}
+            <p><strong>{{ "Account Number" | t }}:</strong> {{ user.extra.account_number }}</p>
+            {% endif %}
+            {% if user.extra.clearing_number %}
+            <p><strong>{{ "Clearing Number" | t }}:</strong> {{ user.extra.clearing_number }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Any remaining extra fields -->
+    {% set known = ['first_name', 'last_name', 'address', 'email', 'cc_email', 'phone', 'bank_name', 'swift_bic', 'account_holder', 'account_number', 'clearing_number'] %}
+    {% for key, value in user.extra.items() if key not in known %}
+    <div class="mb-6">
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <p><strong>{{ key.replace('_', ' ').title() | t }}:</strong> {{ value }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>

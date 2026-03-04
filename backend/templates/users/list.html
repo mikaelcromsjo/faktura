@@ -1,0 +1,59 @@
+<div id="users-container">
+    <div id="users-list">
+        <div class="full-table">
+            <table class="table-auto w-full border overflow-x-auto">
+                <thead>
+                    <tr>
+                        <th class="px-2 py-1 border">{{ "Username" | t }}</th>
+                        <th class="px-2 py-1 border">{{ "Caller" | t }}</th>
+                        <th class="px-2 py-1 border">{{ "Admin" | t }}</th>
+                        <th class="px-2 py-1 border">{{ "Command" | t }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr hx-get="{{ url_for('user_detail', user_id=user.id) }}?list=short"
+                        hx-target="#users-info"
+                        hx-trigger="click"
+                        class="cursor-pointer hover:bg-gray-100">
+
+                        <td class="px-2 py-1 border">{{ user.username }}</td>
+                        <td class="px-2 py-1 border">{{ user.caller.name if user.caller else '' }}</td>
+                        <td class="px-2 py-1 border">{{ "Yes" | t if user.admin else "No" | t }}</td>
+
+                        <td class="px-2 py-1 border text-center" @click.stop>
+                            <button
+                                hx-get="{{ url_for('user_detail', user_id=user.id) }}"
+                                hx-target="#modal-container"
+                                hx-swap="innerHTML"
+                                @click="$store.modal.open = true">
+                                {{ "Edit" | t }}
+                            </button>
+                            <button
+                                hx-post="{{ url_for('delete_user', user_id=user.id) }}"
+                                hx-on="htmx:afterRequest:
+                                    showPopup(event);
+                                    htmx.ajax('GET', '{{ url_for('users_list') }}', {target:'#users-container'});"
+                                hx-trigger="confirmed"
+                                x-confirm="{{ 'Are you sure you want to delete this record?' | t }}">
+                                {{ "Delete" | t }}
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-2 flex gap-2">
+            <button hx-get="{{ url_for('user_detail', user_id=0) }}"
+                    hx-target="#modal-container"
+                    @click="$store.modal.open = true"
+                    class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
+                {{ "New User" | t }}
+            </button>
+        </div>
+
+        <div class="mt-4" id="users-info"></div>
+    </div>
+</div>

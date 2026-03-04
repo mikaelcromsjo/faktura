@@ -235,7 +235,7 @@
         <nav class="hidden md:flex items-center space-x-4">
           <!-- User Info -->
           <div class="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded">
-            <span>{{ caller }}</span>
+            <span>{{ user }}</span>
             <form method="get" action="/logout" class="inline">
               <button type="submit" class="text-gray-600 hover:text-red-600">
                 {{ "Logout" | t }}
@@ -253,10 +253,22 @@
               {{ "User" | t }}
             </button>
 
+                        <button @click="
+            active = 'users';
+          " :class="{'bg-gray-200': active === 'users'}" class="px-3 py-2 rounded hover:bg-gray-200">
+              {{ "Users" | t }}
+            </button>
+
             <button @click="
             active = 'companies';
           " :class="{'bg-gray-200': active === 'companies'}" class="px-3 py-2 rounded hover:bg-gray-200">
               {{ "Companies" | t }}
+            </button>
+
+            <button @click="
+            active = 'callers';
+          " :class="{'bg-gray-200': active === 'callers'}" class="px-3 py-2 rounded hover:bg-gray-200">
+              {{ "Accounts" | t }}
             </button>
 
             <button @click="
@@ -290,7 +302,7 @@
         <div class="px-4 py-3 space-y-3">
           <!-- User Info -->
           <div class="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
-            <span>{{ user }} {{ caller }}</span>
+            <span>{{ user }}</span>
             <form method="get" action="/logout">
               <button type="submit" class="text-sm text-gray-600 hover:text-red-600">
                 {{ "Logout" | t }}
@@ -308,12 +320,16 @@
     <!-- Hidden HTMX triggers -->
     <div style="display:none">
       <div x-ref="tabContent">
-        <button hx-trigger="load" x-ref="users" hx-get="{{ url_for('user') }}" hx-target="#user_content"
+        <button hx-trigger="load" x-ref="users" hx-get="{{ url_for('users_list') }}" hx-target="#users_content"
+          hx-push-url="false"></button>
+        <button hx-trigger="load" x-ref="user" hx-get="{{ url_for('user') }}" hx-target="#user_content"
           hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="invoices" hx-get="{{ url_for('invoices_list') }}" hx-target="#invoice_content"
           hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="companies" hx-get="{{ url_for('companies_list') }}"
           hx-target="#companies_content" hx-push-url="false"></button>
+        <button hx-trigger="load" x-ref="callers" hx-get="{{ url_for('callers_list') }}"
+          hx-target="#callers_content" hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="admin" hx-get="{{ url_for('admin_dashboard') }}" hx-target="#admin_content"
           hx-push-url="false"></button>
 
@@ -323,7 +339,11 @@
     <main class="bg-white mx-auto p-1 w-full">
       <div id="user_content" x-show="active === 'user'" class="bg-white rounded shadow p-4">
       </div>
+      <div id="users_content" x-show="active === 'users'" class="bg-white rounded shadow p-4">
+      </div>
       <div id="companies_content" x-show="active === 'companies'" class="bg-white rounded shadow p-4">
+      </div>
+      <div id="callers_content" x-show="active === 'callers'" class="bg-white rounded shadow p-4">
       </div>
       <div id="invoice_content" x-show="active === 'invoice'" class="bg-white rounded shadow p-4">
       </div>

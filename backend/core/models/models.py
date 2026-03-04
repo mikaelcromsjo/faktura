@@ -116,7 +116,11 @@ class User(BaseMixin, Base):
     def set_password(self, password: str):
         self.password_hash = pwd_context.hash(password)
 
+
+
 class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    admin: Optional[int] = None
     caller_id: Optional[int] = None
     extra: Optional[Dict[str, Any]] = None
 
