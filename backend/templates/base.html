@@ -270,7 +270,9 @@
               {{ "Companies" | t }}
             </button>
 
-            <button @click="
+            <button 
+            x-show="is_admin";            
+            @click="
             active = 'callers';
           " :class="{'bg-gray-200': active === 'callers'}" class="px-3 py-2 rounded hover:bg-gray-200">
               {{ "Accounts" | t }}
