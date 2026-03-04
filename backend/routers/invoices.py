@@ -82,7 +82,7 @@ def new_invoice(
 # -----------------------------
 # Invoice Detail Modal (HTMX fragment)
 # -----------------------------
-@router.get("invoice/{invoice_id}", response_class=HTMLResponse)
+@router.get("/invoice/{invoice_id}", response_class=HTMLResponse)
 def invoice_detail(
     request: Request,
     invoice_id: int,
