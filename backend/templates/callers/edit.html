@@ -1,9 +1,9 @@
-<div x-init="$store.modal.title = '{{ "Account" | t }}: {{ caller.name }}'"></div> 
-<div x-init="$store.modal.submit = '{{ "Save" | t }}'"></div> 
+<div x-init="$store.modal.title = '{{ "Account" | t }}: {{ caller.name }}'"></div>
+<div x-init="$store.modal.submit = '{{ "Save" | t }}'"></div>
 
 <form
     hx-post="{{ url_for('upsert_caller') }}"
-    hx-target="#caller-list"
+    hx-target="#callers-list"
     hx-swap="innerHTML"
     hx-ext="json-enc"
     hx-headers='{"Content-Type": "application/json"}'
@@ -17,20 +17,60 @@
         })
     "
 >
-
     {% if caller.id %}
-    <!-- ID -->
     <div class="mb-2 hidden">
         <label class="block font-semibold">{{ "ID" | t }}</label>
         <input type="text" name="id" value="{{ caller.id }}" class="border p-1 w-full"/>
     </div>
     {% endif %}
 
-    <!-- Account Name -->
+    <h2 class="text-xl font-semibold mb-2">{{ "Account" | t }}</h2>
+
+    <!-- Name -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Account Name' | t }}:*</label>
         <input required type="text" name="name" value="{{ caller.name or '' }}" class="border p-1 w-full"/>
     </div>
+
+    <!-- VAT Number -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'VAT Number' | t }}</label>
+        <input type="text" name="extra.vat_number" value="{{ caller.extra.vat_number or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2 mt-4">{{ "Address" | t }}</h2>
+
+    <!-- Address Line 1 -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Address Line 1' | t }}</label>
+        <input type="text" name="extra.address_line1" value="{{ caller.extra.address_line1 or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Address Line 2 -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Address Line 2' | t }}</label>
+        <input type="text" name="extra.address_line2" value="{{ caller.extra.address_line2 or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Postal Code -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Postal Code' | t }}</label>
+        <input type="text" name="extra.postal_code" value="{{ caller.extra.postal_code or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Postal Address -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Postal Address' | t }}</label>
+        <input type="text" name="extra.postal_address" value="{{ caller.extra.postal_address or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Country -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Country' | t }}</label>
+        <input type="text" name="extra.country" value="{{ caller.extra.country or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2 mt-4">{{ "Bank Information" | t }}</h2>
 
     <!-- Bank Name -->
     <div class="mb-2">
@@ -50,6 +90,18 @@
         <input type="text" name="extra.bic" value="{{ caller.extra.bic or '' }}" class="border p-1 w-full"/>
     </div>
 
+    <!-- Bankgiro -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Bankgiro' | t }}</label>
+        <input type="text" name="extra.bankgiro" value="{{ caller.extra.bankgiro or '' }}" class="border p-1 w-full"/>
+    </div>
+
+    <!-- Plusgiro -->
+    <div class="mb-2">
+        <label class="block font-semibold">{{ 'Plusgiro' | t }}</label>
+        <input type="text" name="extra.plusgiro" value="{{ caller.extra.plusgiro or '' }}" class="border p-1 w-full"/>
+    </div>
+
     <!-- Comment -->
     <div class="mb-2">
         <label class="block font-semibold">{{ "Comment" | t }}</label>
@@ -59,5 +111,4 @@
     <div class="flex justify-end mt-4">
         <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded">{{ "Save" | t }}</button>
     </div>
-
 </form>
