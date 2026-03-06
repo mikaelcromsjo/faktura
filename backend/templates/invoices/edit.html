@@ -38,14 +38,14 @@
 
 <select name="extra.status" class="border p-1 mb-2">
     {% if invoice.extra.status|int == 1 %}
-    <option value="1" {% if invoice.extra.status == "1" %}selected{% endif %}>Processing</option>
+    <option value="1" {% if invoice.extra.status == "1" %}selected{% endif %}>{{ "Processing" | t }}</option>
     {% endif %}
 
     {% if invoice.extra.status|int < 3 %}
-        <option value="2" {% if invoice.extra.status == "2" %}selected{% endif %}>Ok</option>
+        <option value="2" {% if invoice.extra.status == "2" %}selected{% endif %}>{{ "Ok" | t }}</option>
     {% endif %}
 
-    <option value="3" {% if invoice.extra.status == "3" %}selected{% endif %}>Canceled</option>
+    <option value="3" {% if invoice.extra.status == "3" %}selected{% endif %}>{{ "Cancelled" | t }}</option>
 </select>
 
     </div>
