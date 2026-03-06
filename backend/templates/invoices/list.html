@@ -44,7 +44,7 @@
                     {% elif invoice.extra.status == '2' %}
                         {% set status = "OK" | t %}
                     {% elif invoice.extra.status == '3' %}
-                        {% set status = "Canceled" | t %}
+                        {% set status = "Cancelled" | t %}
                     {% endif %}
                     
                     <td class="px-2 py-1 border">{{ status }}</td>
@@ -72,7 +72,7 @@
                         >
                             {{ "Delete" | t }}
                         </button>
-<button x-show="{{invoice.extra.status}} == '2'" @click="window.open('{{ url_for('invoice_detail', invoice_id=invoice.id) }}?list=pdf', '_blank')">
+<button x-show="{{invoice.extra.status}} == '2' || {{invoice.extra.status}} == '3'" @click="window.open('{{ url_for('invoice_detail', invoice_id=invoice.id) }}?list=pdf', '_blank')">
     {{ "PDF" | t }}
 </button>      
 

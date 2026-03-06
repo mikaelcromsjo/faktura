@@ -26,6 +26,24 @@
     </tr>
   </table>
 
+            {% if invoice.extra.status=='3' %}
+            <div style="
+                position: absolute;
+                top: 40%;
+                left: 20%;
+                transform: rotate(-30deg);
+                font-size: 80px;
+                font-weight: bold;
+                color: rgba(255, 0, 0, 0.4);
+                border: 8px solid rgba(255, 0, 0, 0.4);
+                padding: 10px 20px;
+                z-index: 1000;
+            ">{{ "Cancelled" | t }}</div>
+            {% endif %}            
+
+
+
+
   <!-- Company & Company Info -->
 
   <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
@@ -122,4 +140,6 @@
       </td>
     </tr>
   </table>
+
   </div>
+

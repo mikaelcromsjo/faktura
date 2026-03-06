@@ -2,9 +2,7 @@
 <div x-init="$store.modal.submit = '{{ 'Save' | t }}'"></div>
 
 <form
-    hx-post="{{ url_for('upsert_user_admin') }}"
-    hx-target="#users-list"
-    hx-swap="innerHTML"
+    hx-post="{{ url_for('upsert_user') }}"
     hx-ext="json-enc"
     hx-headers='{"Content-Type": "application/json"}'
     x-init="

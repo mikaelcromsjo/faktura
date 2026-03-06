@@ -1,5 +1,5 @@
 {
-  "APPNAME": "Faktura",
+  "APPNAME": "Företagsnamn",
   "Logout": "Logga ut",
   "User": "Användare",
   "Companies": "Företag",
@@ -95,8 +95,9 @@
   "Contact Details": "Kontaktinformation",
   "(leave blank to keep current)": "(lämna blank för att behålla nuvarande)",
   "Accounts": "Konton",
-  "VAT Number": "VAT Number",
-  "New Group": "New Group",
-  "Group": "Group",
-  "Group Name": "Group Name"
+  "VAT Number": "VAT Nummer",
+  "New Group": "Ny grupp",
+  "Group": "Grupp",
+  "Group Name": "Groupnamn",
+  "Cancelled": "Makulerad"
 }

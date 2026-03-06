@@ -32,6 +32,23 @@ def users_list(
         {"request": request, "users": users, "callers": callers}
     )
 
+@router.get("/user", response_class=HTMLResponse, name="user")
+def user(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    user = get_current_user(request, db)
+
+    if not user:
+        user = User.empty()
+
+    return templates.TemplateResponse(
+        "users/user_edit.html",
+        {"request": request, 
+         "user": user},
+    )
+
+
 # -------------------------------------------------
 # User Detail / Edit
 # -------------------------------------------------
@@ -43,8 +60,6 @@ def user_detail(
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
-    if not current_user.admin:
-        raise HTTPException(status_code=403, detail="Admin only")
 
     callers = db.query(Caller).all()
 
@@ -66,36 +81,21 @@ def user_detail(
         {"request": request, "user": data_record, "callers": callers}
     )
 
-@router.get("/user", response_class=HTMLResponse, name="user")
-def user(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    user = get_current_user(request, db)
-
-    if not user:
-        user = User.empty()
-
-    return render(
-        "users/edit.html",
-        {"request": request, 
-         "user": user},
-    )
 
 
 
 # -------------------------------------------------
 # Create/Update
 # -------------------------------------------------
-@router.post("/user/upsert", name="upsert_user_admin", response_class=HTMLResponse)
-async def upsert_user_admin(
+@router.post("/user/upsert", name="upsert_user", response_class=HTMLResponse)
+async def upsert_user(
     request: Request,
     update_data: Update,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
-    if not current_user.admin:
-        raise HTTPException(status_code=403, detail="Admin only")
+#    if not current_user.admin:
+#        raise HTTPException(status_code=403, detail="Admin only")
 
     id = update_data.model_dump().get("id")
     if id:

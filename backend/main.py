@@ -240,10 +240,9 @@ from state import user_data, active_connections
 # --- Routers ---
 # Routers should be defined in /routers/*.py and included here.
 # Each router file exposes a "router" object.
-from routers import invoices, companies, admin, callers, users, user, accounts
+from routers import invoices, companies, admin, callers, users, accounts
 
 app.include_router(accounts.router, tags=["accounts"])
-app.include_router(user.router, tags=["user"])
 app.include_router(users.router, tags=["users"])
 app.include_router(invoices.router, tags=["invoices"])
 app.include_router(companies.router, tags=["companies"])
