@@ -7,7 +7,7 @@ from core.database import get_db
 from core.functions.helpers import populate, build_filters
 from core.auth import get_current_user
 from templates import templates
-from models.models import Caller, Update, CallerUpdate
+from models.models import Caller, Update, CallerUpdate, Account
 
 # -------------------------------------------------
 # Router Setup
@@ -29,6 +29,37 @@ def callers_list(
         {"request": request, "callers": callers}
     )
 
+
+@router.get("/caller", response_class=HTMLResponse, name="caller")
+def caller(
+    request: Request,
+    list: Optional[str] = Query(default=None),
+    db: Session = Depends(get_db)
+):
+    
+    user = get_current_user(request, db)
+    caller_id = getattr(user.caller, "id", 0)
+    if int(caller_id) > 0:
+        caller = db.query(Caller).filter(Caller.id == int(caller_id)).first()
+        if not caller:
+            raise HTTPException(status_code=404, detail="Caller not found")
+    else:
+        caller = Caller()
+
+    accounts = db.query(Account).all()
+
+
+    if list == "short":
+        return templates.TemplateResponse(
+            "callers/info.html",
+            {"request": request, "caller": caller}
+        )
+    return templates.TemplateResponse(
+        "callers/edit.html",
+        {"request": request, "caller": caller, "accounts": accounts}  # Fixed: caller only
+    )
+
+
 # -------------------------------------------------
 # Detail / New
 # -------------------------------------------------
@@ -46,6 +77,8 @@ def caller_detail(
     else:
         caller = Caller()
 
+    accounts = db.query(Account).all()
+
     if list == "short":
         return templates.TemplateResponse(
             "callers/info.html",
@@ -53,8 +86,10 @@ def caller_detail(
         )
     return templates.TemplateResponse(
         "callers/edit.html",
-        {"request": request, "caller": caller}  # Fixed: caller only
+        {"request": request, "caller": caller, "accounts": accounts}  # Fixed: caller only
     )
+
+
 
 # -------------------------------------------------
 # Create/Update
@@ -90,18 +125,36 @@ async def upsert_caller(
             data_dict['extra'][key.split(".", 1)[1]] = value
             del data_dict[key]
 
+    # --- Handle account relationship separately ---
+    account_id = data_dict.pop("account_id", None)
+    if account_id:
+        account_id = int(account_id)
+
     # Populate (match EXACT companies.py signature/order)
     caller = populate(data_dict, caller, CallerUpdate)  # Check this order!
     
+    if isinstance(account_id, int):
+        account_instance = db.get(Account, account_id)
+        if not account_instance:
+            raise HTTPException(status_code=404, detail="Account not found")
+        caller.account = account_instance
+
+
     db.add(caller)
     db.commit()
     db.refresh(caller)
 
     callers = db.query(Caller).all()
+    accounts = db.query(Account).all()
+
     
     response = templates.TemplateResponse(
         "callers/list.html",
-        {"request": request, "callers": callers, "detail": "Updated"}
+        {"request": request, 
+         "callers": callers, 
+         "accounts": accounts,
+         "detail": "Updated"
+         }
     )
     response.headers["HX-Popup-Message"] = "Saved"
     return response

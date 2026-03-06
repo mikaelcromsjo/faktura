@@ -47,7 +47,6 @@
 
     <!-- Extra Fields -->
     <div class="mb-6">
-        <h4 class="text-lg font-semibold mb-2">{{ "Extra" | t }}</h4>
         <div class="grid grid-cols-2 gap-4 text-sm">
             {% for key, value in company.extra.items() if key not in ['company_name', 'org_nr', 'address_line1', 'address_line2', 'postal_code', 'postal_address', 'country', 'cc_email'] %}
             <p><strong>{{ key.replace('_', ' ').title() | t }}:</strong> {{ value }}</p>

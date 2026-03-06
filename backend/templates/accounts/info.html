@@ -1,0 +1,56 @@
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-lg font-sans text-gray-800">
+    <h1 class="text-xl font-bold mb-4">{{ "Account" | t }}: {{ account.name }}</h1>
+
+    <div class="space-y-1 mb-6">
+        <p><strong>{{ "ID" | t }}:</strong> {{ account.id }}</p>
+        {% if account.extra.vat_number %}
+        <p><strong>{{ "VAT Number" | t }}:</strong> {{ account.extra.vat_number }}</p>
+        {% endif %}
+        {% if account.extra.comment %}
+        <p><strong>{{ "Comment" | t }}:</strong> {{ account.extra.comment }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Address -->
+    {% if account.extra %}
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "Address" | t }}</h2>
+        <div class="space-y-1">
+            {% if account.extra.address_line1 %}
+            <p>{{ account.extra.address_line1 }}</p>
+            {% endif %}
+            {% if account.extra.address_line2 %}
+            <p>{{ account.extra.address_line2 }}</p>
+            {% endif %}
+            {% if account.extra.postal_code or account.extra.postal_address %}
+            <p>{{ account.extra.postal_code or '' }} {{ account.extra.postal_address or '' }}</p>
+            {% endif %}
+            {% if account.extra.country %}
+            <p>{{ account.extra.country }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Banking -->
+    <div class="border-b pb-6 mb-6">
+        <h2 class="text-xl font-bold mb-4">{{ "Bank Information" | t }}</h2>
+        <div class="grid grid-cols-2 gap-4">
+            {% if account.extra.bank_name %}
+            <p><strong>{{ "Bank Name" | t }}:</strong> {{ account.extra.bank_name }}</p>
+            {% endif %}
+            {% if account.extra.iban %}
+            <p><strong>{{ "IBAN" | t }}:</strong> {{ account.extra.iban }}</p>
+            {% endif %}
+            {% if account.extra.bic %}
+            <p><strong>{{ "BIC" | t }}:</strong> {{ account.extra.bic }}</p>
+            {% endif %}
+            {% if account.extra.bankgiro %}
+            <p><strong>{{ "Bankgiro" | t }}:</strong> {{ account.extra.bankgiro }}</p>
+            {% endif %}
+            {% if account.extra.plusgiro %}
+            <p><strong>{{ "Plusgiro" | t }}:</strong> {{ account.extra.plusgiro }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>

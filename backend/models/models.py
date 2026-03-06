@@ -88,6 +88,8 @@ class Caller(BaseMixin, Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    account_id = Column(Integer, ForeignKey("accounts.id"), nullable=True)
+    account = relationship("Account")
     extra = Column(MutableDict.as_mutable(JSON), default=dict)
 
 class CallerUpdate(BaseModel):
@@ -96,4 +98,19 @@ class CallerUpdate(BaseModel):
     extra: Optional[Dict[str, Any]] = Field(None, alias='extra')
     
     class Config:
-        from_attributes = True  # v2 syntax: populate_object=True (v1)
+        from_attributes = True  # v2 syntclassax: populate_object=True (v1)
+
+class Account(BaseMixin, Base):
+    __tablename__ = "accounts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    extra = Column(MutableDict.as_mutable(JSON), default=dict)
+
+class AccountUpdate(BaseModel):
+    id: Optional[int] = Field(None, alias='id')
+    name: str = Field(..., alias='name')
+    extra: Optional[Dict[str, Any]] = Field(None, alias='extra')
+    
+    class Config:
+        from_attributes = True  # v2 syntclassax: populate_object=True (v1)

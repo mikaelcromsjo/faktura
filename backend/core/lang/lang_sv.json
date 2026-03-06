@@ -54,7 +54,7 @@
   "Postal Code": "Postnummer",
   "Postal Address": "Postadress",
   "Country": "Land",
-  "Caller": "Konto",
+  "Caller": "Grupp",
   "Select...": "Välj...",
   "Comment": "Kommentar",
   "VAT (%)": "Moms (%)",
@@ -79,7 +79,7 @@
   "BIC/SWIFT": "BIC/SWIFT",
   "Bankgiro": "Bankgiro",
   "Plusgiro": "Plusgiro",
-  "Callers": "Callers/Konton",
+  "Callers": "Grupper",
   "Account": "Konto",
   "New Account": "Nytt Konto",
   "Account Information": "Kontoinformation",
@@ -95,5 +95,8 @@
   "Contact Details": "Kontaktinformation",
   "(leave blank to keep current)": "(lämna blank för att behålla nuvarande)",
   "Accounts": "Konton",
-  "VAT Number": "VAT Number"
+  "VAT Number": "VAT Number",
+  "New Group": "New Group",
+  "Group": "Group",
+  "Group Name": "Group Name"
 }

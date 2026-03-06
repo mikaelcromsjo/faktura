@@ -41,14 +41,14 @@ def user(
         user = User.empty()
 
     return render(
-        "user/info.html",
+        "users/edit.html",
         {"request": request, 
          "user": user},
     )
 
 
-@router.post("/user/upsert", name="upsert_user", response_class=HTMLResponse)
-async def upsert_user(
+@router.post("/_user/upsert", name="upsert_user", response_class=HTMLResponse)
+async def upsert__user(
     request: Request,
     update_data: Update,
     db: Session = Depends(get_db),
@@ -81,7 +81,7 @@ async def upsert_user(
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
     response = templates.TemplateResponse(
-        "user/info.html",
+        "users/edit.html",
         {
             "request": request,
             "user": data_record

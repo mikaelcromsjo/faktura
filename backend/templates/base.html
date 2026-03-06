@@ -248,7 +248,6 @@
 
 
             <button 
-            x-show="!is_admin";
             @click="
             active = 'user';
             
@@ -273,10 +272,26 @@
             <button 
             x-show="is_admin";            
             @click="
-            active = 'callers';
-          " :class="{'bg-gray-200': active === 'callers'}" class="px-3 py-2 rounded hover:bg-gray-200">
+            active = 'accounts';
+          " :class="{'bg-gray-200': active === 'accounts'}" class="px-3 py-2 rounded hover:bg-gray-200">
               {{ "Accounts" | t }}
             </button>
+
+            <button 
+            x-show="is_admin";            
+            @click="
+            active = 'callers';
+          " :class="{'bg-gray-200': active === 'callers'}" class="px-3 py-2 rounded hover:bg-gray-200">
+              {{ "Callers" | t }}
+            </button>
+
+            <button 
+            @click="
+            active = 'caller';
+          " :class="{'bg-gray-200': active === 'caller'}" class="px-3 py-2 rounded hover:bg-gray-200">
+              {{ "Caller" | t }}
+            </button>
+
 
             <button @click="
             active = 'invoice';
@@ -335,8 +350,12 @@
           hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="companies" hx-get="{{ url_for('companies_list') }}"
           hx-target="#companies_content" hx-push-url="false"></button>
+        <button hx-trigger="load" x-ref="accounts" hx-get="{{ url_for('accounts_list') }}"
+          hx-target="#accounts_content" hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="callers" hx-get="{{ url_for('callers_list') }}"
           hx-target="#callers_content" hx-push-url="false"></button>
+        <button hx-trigger="load" x-ref="caller" hx-get="{{ url_for('caller') }}"
+          hx-target="#caller_content" hx-push-url="false"></button>
         <button hx-trigger="load" x-ref="admin" hx-get="{{ url_for('admin_dashboard') }}" hx-target="#admin_content"
           hx-push-url="false"></button>
 
@@ -350,7 +369,11 @@
       </div>
       <div id="companies_content" x-show="active === 'companies'" class="bg-white rounded shadow p-4">
       </div>
+      <div id="accounts_content" x-show="active === 'accounts'" class="bg-white rounded shadow p-4">
+      </div>
       <div id="callers_content" x-show="active === 'callers'" class="bg-white rounded shadow p-4">
+      </div>
+      <div id="caller_content" x-show="active === 'caller'" class="bg-white rounded shadow p-4">
       </div>
       <div id="invoice_content" x-show="active === 'invoice'" class="bg-white rounded shadow p-4">
       </div>

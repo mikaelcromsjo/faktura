@@ -26,33 +26,8 @@
             {% if user.extra.email %}
             <p><strong>{{ "Email" | t }}:</strong> {{ user.extra.email }}</p>
             {% endif %}
-            {% if user.extra.cc_email %}
-            <p><strong>{{ "CC Email" | t }}:</strong> {{ user.extra.cc_email }}</p>
-            {% endif %}
             {% if user.extra.phone %}
             <p><strong>{{ "Phone" | t }}:</strong> {{ user.extra.phone }}</p>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Bank Information -->
-    <div class="border-b pb-6 mb-6">
-        <h2 class="text-xl font-bold mb-4">{{ "Bank Information" | t }}</h2>
-        <div class="grid grid-cols-2 gap-4">
-            {% if user.extra.bank_name %}
-            <p><strong>{{ "Bank Name" | t }}:</strong> {{ user.extra.bank_name }}</p>
-            {% endif %}
-            {% if user.extra.swift_bic %}
-            <p><strong>{{ "SWIFT / BIC" | t }}:</strong> {{ user.extra.swift_bic }}</p>
-            {% endif %}
-            {% if user.extra.account_holder %}
-            <p><strong>{{ "Account Holder" | t }}:</strong> {{ user.extra.account_holder }}</p>
-            {% endif %}
-            {% if user.extra.account_number %}
-            <p><strong>{{ "Account Number" | t }}:</strong> {{ user.extra.account_number }}</p>
-            {% endif %}
-            {% if user.extra.clearing_number %}
-            <p><strong>{{ "Clearing Number" | t }}:</strong> {{ user.extra.clearing_number }}</p>
             {% endif %}
         </div>
     </div>

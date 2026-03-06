@@ -66,6 +66,24 @@ def user_detail(
         {"request": request, "user": data_record, "callers": callers}
     )
 
+@router.get("/user", response_class=HTMLResponse, name="user")
+def user(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    user = get_current_user(request, db)
+
+    if not user:
+        user = User.empty()
+
+    return render(
+        "users/edit.html",
+        {"request": request, 
+         "user": user},
+    )
+
+
+
 # -------------------------------------------------
 # Create/Update
 # -------------------------------------------------

@@ -1,33 +1,35 @@
-<div id="callers-container">
-    <div id="callers-list">
+<div id="accounts-container">
+    <div id="accounts-list">
 
         <div class="full-table">
             <table class="table-auto w-full border overflow-x-auto">
                 <thead>
                     <tr>
-                        <th class="px-2 py-1 border">{{ "Caller" | t }}</th>
                         <th class="px-2 py-1 border">{{ "Account" | t }}</th>
+                        <th class="px-2 py-1 border">{{ "Bank Name" | t }}</th>
+                        <th class="px-2 py-1 border">{{ "IBAN" | t }}</th>
                         <th x-show="is_admin" class="px-2 py-1 border">{{ "Comment" | t }}</th>
                         <th class="px-2 py-1 border">{{ "Command" | t }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for caller in callers %}
-                    <tr hx-get="{{ url_for('caller_detail', caller_id=caller.id) }}?list=short"
-                        hx-target="#callers-info"
+                    {% for account in accounts %}
+                    <tr hx-get="{{ url_for('account_detail', account_id=account.id) }}?list=short"
+                        hx-target="#accounts-info"
                         hx-trigger="click"
                         class="cursor-pointer hover:bg-gray-100">
 
-                        <td class="px-2 py-1 border">{{ caller.name }}</td>
-                        <td class="px-2 py-1 border">{{ caller.account.name or '' }}</td>
-                        <td x-show="is_admin" class="px-2 py-1 border">{{ caller.extra.comment or '' }}</td>
+                        <td class="px-2 py-1 border">{{ account.name }}</td>
+                        <td class="px-2 py-1 border">{{ account.extra.bank_name or '' }}</td>
+                        <td class="px-2 py-1 border">{{ account.extra.iban or '' }}</td>
+                        <td x-show="is_admin" class="px-2 py-1 border">{{ account.extra.comment or '' }}</td>
 
                         <td class="px-2 py-1 border text-center" 
                             @click.stop
                             >
 
                             <button 
-                                hx-get="{{ url_for('caller_detail', caller_id=caller.id) }}"
+                                hx-get="{{ url_for('account_detail', account_id=account.id) }}"
                                 hx-target="#modal-container"
                                 hx-swap="innerHTML"
                                 @click="$store.modal.open = true"
@@ -35,10 +37,10 @@
                                 {{ "Edit" | t }}
                             </button>                
                             <button 
-                                hx-post="{{ url_for('delete_caller', caller_id=caller.id) }}"
+                                hx-post="{{ url_for('delete_account', account_id=account.id) }}"
                                 hx-on="htmx:afterRequest: 
                                     showPopup(event);
-                                    htmx.ajax('GET', '{{ url_for('callers_list') }}', {target:'#callers-container'}); "
+                                    htmx.ajax('GET', '{{ url_for('accounts_list') }}', {target:'#accounts-container'}); "
                                 hx-trigger="confirmed"
                                 x-confirm="{{'Are you sure you want to delete this record?' | t }}"
                             >
@@ -52,15 +54,15 @@
             </table>
         </div>
         <div class="mt-2 flex gap-2">
-            <button hx-get="{{ url_for('caller_detail', caller_id=0) }}"
+            <button hx-get="{{ url_for('account_detail', account_id=0) }}"
                     hx-target="#modal-container"
                     @click="$store.modal.open = true"
                     class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
-                {{ "New Group" | t }}
+                {{ "New Account" | t }}
             </button>
         </div>
         
-        <div class="mt-4" id="callers-info"></div>
+        <div class="mt-4" id="accounts-info"></div>
         
     </div>
 </div>

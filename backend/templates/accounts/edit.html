@@ -1,9 +1,9 @@
-<div x-init="$store.modal.title = '{{ "Group" | t }}: {{ caller.name }}'"></div>
+<div x-init="$store.modal.title = '{{ "Account" | t }}: {{ account.name }}'"></div>
 <div x-init="$store.modal.submit = '{{ "Save" | t }}'"></div>
 
 <form
-    hx-post="{{ url_for('upsert_caller') }}"
-    hx-target="#callers-list"
+    hx-post="{{ url_for('upsert_account') }}"
+    hx-target="#accounts-list"
     hx-swap="innerHTML"
     hx-ext="json-enc"
     hx-headers='{"Content-Type": "application/json"}'
@@ -17,40 +17,25 @@
         })
     "
 >
-    {% if caller.id %}
+    {% if account.id %}
     <div class="mb-2 hidden">
         <label class="block font-semibold">{{ "ID" | t }}</label>
-        <input type="text" name="id" value="{{ caller.id }}" class="border p-1 w-full"/>
+        <input type="text" name="id" value="{{ account.id }}" class="border p-1 w-full"/>
     </div>
     {% endif %}
 
-    <h2 class="text-xl font-semibold mb-2">{{ "Group" | t }}</h2>
+    <h2 class="text-xl font-semibold mb-2">{{ "Account" | t }}</h2>
 
     <!-- Name -->
     <div class="mb-2">
-        <label class="block font-semibold">{{ 'Group Name' | t }}:*</label>
-        <input required type="text" name="name" value="{{ caller.name or '' }}" class="border p-1 w-full"/>
+        <label class="block font-semibold">{{ 'Account Name' | t }}:*</label>
+        <input required type="text" name="name" value="{{ account.name or '' }}" class="border p-1 w-full"/>
     </div>
-
-    <!-- Account -->
-    {% if as_admin %}
-
-    <div class="mb-2">
-        <label class="block font-semibold">{{ "Account" | t }}</label>
-        <select name="account_id" class="border p-1 w-full">
-            <option value="" {% if not caller.account %}selected{% endif %}>{{ "Select..." | t }}</option>
-            {% for account in accounts %}
-            <option value="{{ account.id }}" {% if caller.account_id == account.id %}selected{% endif %}>{{ account.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    {% endif %}
 
     <!-- VAT Number -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'VAT Number' | t }}</label>
-        <input type="text" name="extra.vat_number" value="{{ caller.extra.vat_number or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.vat_number" value="{{ account.extra.vat_number or '' }}" class="border p-1 w-full"/>
     </div>
 
     <h2 class="text-xl font-semibold mb-2 mt-4">{{ "Address" | t }}</h2>
@@ -58,31 +43,31 @@
     <!-- Address Line 1 -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Address Line 1' | t }}</label>
-        <input type="text" name="extra.address_line1" value="{{ caller.extra.address_line1 or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.address_line1" value="{{ account.extra.address_line1 or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Address Line 2 -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Address Line 2' | t }}</label>
-        <input type="text" name="extra.address_line2" value="{{ caller.extra.address_line2 or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.address_line2" value="{{ account.extra.address_line2 or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Postal Code -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Postal Code' | t }}</label>
-        <input type="text" name="extra.postal_code" value="{{ caller.extra.postal_code or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.postal_code" value="{{ account.extra.postal_code or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Postal Address -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Postal Address' | t }}</label>
-        <input type="text" name="extra.postal_address" value="{{ caller.extra.postal_address or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.postal_address" value="{{ account.extra.postal_address or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Country -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Country' | t }}</label>
-        <input type="text" name="extra.country" value="{{ caller.extra.country or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.country" value="{{ account.extra.country or '' }}" class="border p-1 w-full"/>
     </div>
 
     <h2 class="text-xl font-semibold mb-2 mt-4">{{ "Bank Information" | t }}</h2>
@@ -90,37 +75,37 @@
     <!-- Bank Name -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Bank Name' | t }}</label>
-        <input type="text" name="extra.bank_name" value="{{ caller.extra.bank_name or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.bank_name" value="{{ account.extra.bank_name or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- IBAN -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'IBAN' | t }}</label>
-        <input type="text" name="extra.iban" value="{{ caller.extra.iban or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.iban" value="{{ account.extra.iban or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- BIC -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'BIC' | t }}</label>
-        <input type="text" name="extra.bic" value="{{ caller.extra.bic or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.bic" value="{{ account.extra.bic or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Bankgiro -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Bankgiro' | t }}</label>
-        <input type="text" name="extra.bankgiro" value="{{ caller.extra.bankgiro or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.bankgiro" value="{{ account.extra.bankgiro or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Plusgiro -->
     <div class="mb-2">
         <label class="block font-semibold">{{ 'Plusgiro' | t }}</label>
-        <input type="text" name="extra.plusgiro" value="{{ caller.extra.plusgiro or '' }}" class="border p-1 w-full"/>
+        <input type="text" name="extra.plusgiro" value="{{ account.extra.plusgiro or '' }}" class="border p-1 w-full"/>
     </div>
 
     <!-- Comment -->
     <div class="mb-2">
         <label class="block font-semibold">{{ "Comment" | t }}</label>
-        <textarea name="extra.comment" class="border p-1 w-full">{{ caller.extra.comment or '' }}</textarea>
+        <textarea name="extra.comment" class="border p-1 w-full">{{ account.extra.comment or '' }}</textarea>
     </div>
 
     <div class="flex justify-end mt-4">

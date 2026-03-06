@@ -9,6 +9,9 @@
         {% if caller.extra.comment %}
         <p><strong>{{ "Comment" | t }}:</strong> {{ caller.extra.comment }}</p>
         {% endif %}
+        {% if caller.account.name %}
+        <p><strong>{{ "Account" | t }}:</strong> {{ caller.account.name }}</p>
+        {% endif %}
     </div>
 
     <!-- Address -->
