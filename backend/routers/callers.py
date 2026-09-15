@@ -25,7 +25,7 @@ def callers_list(
 ):
     callers = db.query(Caller).all()
     return templates.TemplateResponse(
-        "callers/list.html",
+        request, "callers/list.html",
         {"request": request, "callers": callers}
     )
 
@@ -51,11 +51,11 @@ def caller(
 
     if list == "short":
         return templates.TemplateResponse(
-            "callers/info.html",
+            request, "callers/info.html",
             {"request": request, "caller": caller}
         )
     return templates.TemplateResponse(
-        "callers/edit.html",
+        request, "callers/edit.html",
         {"request": request, "caller": caller, "accounts": accounts}  # Fixed: caller only
     )
 
@@ -81,11 +81,11 @@ def caller_detail(
 
     if list == "short":
         return templates.TemplateResponse(
-            "callers/info.html",
+            request, "callers/info.html",
             {"request": request, "caller": caller}
         )
     return templates.TemplateResponse(
-        "callers/edit.html",
+        request, "callers/edit.html",
         {"request": request, "caller": caller, "accounts": accounts}  # Fixed: caller only
     )
 
@@ -149,7 +149,7 @@ async def upsert_caller(
 
     
     response = templates.TemplateResponse(
-        "callers/list.html",
+        request, "callers/list.html",
         {"request": request, 
          "callers": callers, 
          "accounts": accounts,
@@ -176,11 +176,11 @@ def delete_caller(caller_id: str, db: Session = Depends(get_db)):
 # -------------------------------------------------
 @router.get("/filter", response_class=HTMLResponse)
 def caller_filter(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse("callers/filter.html", {"request": request})
+    return templates.TemplateResponse(request, "callers/filter.html", {"request": request})
 
 @router.post("/set_filter", response_class=HTMLResponse)
 async def caller_set_filter(request: Request, db: Session = Depends(get_db)):
     callers = db.query(Caller).all()
     return templates.TemplateResponse(
-        "callers/list.html", {"request": request, "callers": callers}
+        request, "callers/list.html", {"request": request, "callers": callers}
     )

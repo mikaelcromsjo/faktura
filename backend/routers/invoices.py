@@ -136,7 +136,7 @@ def invoices_list(
 
 
     return templates.TemplateResponse(
-        "invoices/list.html", {"request": request, "invoices": invoices, "is_admin": getattr(user, "admin", False),}
+        request, "invoices/list.html", {"request": request, "invoices": invoices, "is_admin": getattr(user, "admin", False),}
     )
 
 
@@ -159,7 +159,7 @@ def new_invoice(
 
 
     return templates.TemplateResponse(
-        "invoices/edit.html", {"request": request, "invoice": invoice, "editable": True, "companies": companies}
+        request, "invoices/edit.html", {"request": request, "invoice": invoice, "editable": True, "companies": companies}
     )               
 
 # -----------------------------
@@ -191,7 +191,7 @@ def invoice_detail(
     ctx = {"request": request, "invoice": invoice, "invoice_data": invoice_data, "companies": companies}
 
     if list == "short":
-        return templates.TemplateResponse("invoices/info.html", ctx)
+        return templates.TemplateResponse(request, "invoices/info.html", ctx)
 
     elif list == "pdf":
         pdf_path = create_pdf(invoice_id, db)
@@ -204,7 +204,7 @@ def invoice_detail(
 
     else:
         return templates.TemplateResponse(
-            "invoices/edit.html",
+            request, "invoices/edit.html",
             {**ctx, "editable": True, "is_admin": user.admin}
         )
          
@@ -357,7 +357,7 @@ async def upsert_invoice(
     invoices = query.all()
 
     response = templates.TemplateResponse(
-        "invoices/list.html",
+        request, "invoices/list.html",
         {"request": request, "invoices": invoices},
     )
     # Set the popup message in a custom header

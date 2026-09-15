@@ -150,21 +150,13 @@ app = FastAPI(title="HTMX + Alpine.js Prototype", debug=True)
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 401 and request.url.path not in ["/login", "/logout"]:
+        return RedirectResponse(url="/login", status_code=303)
     # Only return the error message, no traceback
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail}
     )
-
-@app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
-    if exc.status_code == 401:
-        # Don't redirect if already on login/logout
-        if request.url.path not in ["/login", "/logout"]:
-            return RedirectResponse(url="/login", status_code=303)
-    if exc.status_code == 404:
-        return
-    raise exc
 
 
 class LanguageMiddleware:
@@ -294,7 +286,7 @@ templates.env.filters["todatetime"] = todatetime
 @app.get("/login")
 async def login_get(request: Request):
         
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse(request, "login.html", {"request": request})
 
 # --- Routes ---
 @app.post("/login")
@@ -319,7 +311,7 @@ async def login_post(request: Request, username: str = Form(...), password: str 
         request.session["user"] = user.id
         return RedirectResponse(url="/", status_code=303)
 
-    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
+    return templates.TemplateResponse(request, "login.html", {"request": request, "error": "Invalid credentials"})
 
 
 @app.get("/get-ws-token")
@@ -341,7 +333,7 @@ async def logout(request: Request):
     _translators_cache.clear()
 
     return templates.TemplateResponse(
-        "login.html",
+        request, "login.html",
         {
             "request": request,
             "message": "Logged out" 
@@ -391,7 +383,7 @@ async def root(request: Request, user = Depends(get_current_user)):
         return RedirectResponse(url="/dashboard")
     else:
         return templates.TemplateResponse(
-            "login.html",
+            request, "login.html",
             {
                 "request": request,
             },
@@ -411,7 +403,7 @@ async def read_root(request: Request, user: str = Depends(get_current_user)):
     """
     
     return templates.TemplateResponse(
-        "base.html",
+        request, "base.html",
         {
             "request": request,
             "title": "Dashboard",

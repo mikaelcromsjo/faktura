@@ -28,7 +28,7 @@ def users_list(
     callers = db.query(Caller).all()
 
     return templates.TemplateResponse(
-        "users/list.html",
+        request, "users/list.html",
         {"request": request, "users": users, "callers": callers}
     )
 
@@ -43,7 +43,7 @@ def user(
         user = User.empty()
 
     return templates.TemplateResponse(
-        "users/user_edit.html",
+        request, "users/user_edit.html",
         {"request": request, 
          "user": user},
     )
@@ -73,11 +73,11 @@ def user_detail(
 
     if list == "short":
         return templates.TemplateResponse(
-            "users/info.html",
+            request, "users/info.html",
             {"request": request, "user": data_record}
         )
     return templates.TemplateResponse(
-        "users/edit.html",
+        request, "users/edit.html",
         {"request": request, "user": data_record, "callers": callers}
     )
 
@@ -151,7 +151,7 @@ async def upsert_user(
     callers = db.query(Caller).all()
 
     response = templates.TemplateResponse(
-        "users/list.html",
+        request, "users/list.html",
         {"request": request, "users": users, "callers": callers, "detail": "Updated"}
     )
     response.headers["HX-Popup-Message"] = "Saved"

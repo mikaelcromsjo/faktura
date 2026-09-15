@@ -164,11 +164,11 @@ def render(template_name: str, context: dict, base_template: str = "base.html"):
     base_template = base_template.lstrip("/")
 
     if request.headers.get("hx-request"):
-        return templates.TemplateResponse(template_name, context)
+        return templates.TemplateResponse(request, template_name, context)
     else:
         ctx = context.copy()
         ctx["content_template"] = template_name
-        return templates.TemplateResponse(base_template, ctx)
+        return templates.TemplateResponse(request, base_template, ctx)
     
 
     

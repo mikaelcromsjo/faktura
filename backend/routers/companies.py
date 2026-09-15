@@ -68,7 +68,7 @@ def company_new(
     callers = query.all()
 
     return templates.TemplateResponse(
-        "companies/edit.html",
+        request, "companies/edit.html",
         {
             "request": request, 
             "company": company, 
@@ -145,7 +145,7 @@ async def upsert_company(
 
 
     response =  templates.TemplateResponse(
-        "companies/list.html",
+        request, "companies/list.html",
         {
             "request": request, 
             "companies": companies,
@@ -197,7 +197,7 @@ def company_detail(
     if list == "short":
         # Render short template
         return templates.TemplateResponse(
-            "companies/info.html",
+            request, "companies/info.html",
             {
                 "request": request, 
                 "company": company, 
@@ -208,7 +208,7 @@ def company_detail(
     else:
         # Render full template
         return templates.TemplateResponse(
-            "companies/edit.html",
+            request, "companies/edit.html",
             {
                 "request": request, 
                 "company": company, 
@@ -244,7 +244,7 @@ def company_filter(
 #    filters = build_filters(data_dict, Company)
 
     return templates.TemplateResponse(
-        "companies/filter.html",
+        request, "companies/filter.html",
         {
             "request": request, 
             "filters": filter_dict, 
@@ -281,6 +281,6 @@ async def set_filter(
     companies = query.all()
 
     return templates.TemplateResponse(
-        "companies/list.html",
+        request, "companies/list.html",
         {"request": request, "companies": companies}
     )

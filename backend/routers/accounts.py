@@ -25,7 +25,7 @@ def accounts_list(
 ):
     accounts = db.query(Account).all()
     return templates.TemplateResponse(
-        "accounts/list.html",
+        request, "accounts/list.html",
         {"request": request, "accounts": accounts}
     )
 
@@ -48,11 +48,11 @@ def account_detail(
 
     if list == "short":
         return templates.TemplateResponse(
-            "accounts/info.html",
+            request, "accounts/info.html",
             {"request": request, "account": account}
         )
     return templates.TemplateResponse(
-        "accounts/edit.html",
+        request, "accounts/edit.html",
         {"request": request, "account": account}  # Fixed: account only
     )
 
@@ -100,7 +100,7 @@ async def upsert_account(
     accounts = db.query(Account).all()
     
     response = templates.TemplateResponse(
-        "accounts/list.html",
+        request, "accounts/list.html",
         {"request": request, "accounts": accounts, "detail": "Updated"}
     )
     response.headers["HX-Popup-Message"] = "Saved"
@@ -123,11 +123,11 @@ def delete_account(account_id: str, db: Session = Depends(get_db)):
 # -------------------------------------------------
 @router.get("/filter", response_class=HTMLResponse)
 def account_filter(request: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse("accounts/filter.html", {"request": request})
+    return templates.TemplateResponse(request, "accounts/filter.html", {"request": request})
 
 @router.post("/set_filter", response_class=HTMLResponse)
 async def account_set_filter(request: Request, db: Session = Depends(get_db)):
     accounts = db.query(Account).all()
     return templates.TemplateResponse(
-        "accounts/list.html", {"request": request, "accounts": accounts}
+        request, "accounts/list.html", {"request": request, "accounts": accounts}
     )

@@ -68,7 +68,7 @@ async def admin_script(
         return HTMLResponse("Access denied", status_code=403)
 
     return templates.TemplateResponse(
-        "admin/script.html",
+        request, "admin/script.html",
         {"request": request, "output": None, "html_output": None, "scripts": ALLOWED_SCRIPTS, "script_examples": SCRIPT_EXAMPLES},
     )
 
@@ -140,7 +140,7 @@ async def run_admin_script(
         print("Error")
 
     return templates.TemplateResponse(
-        "admin/script_output.html",
+        request, "admin/script_output.html",
         {"request": request, "output": output, "html_output": html_output, "scripts": ALLOWED_SCRIPTS, "script_examples": SCRIPT_EXAMPLES},
     )
 
@@ -158,7 +158,7 @@ def admin_dashboard(
     
 
     return templates.TemplateResponse(
-        "admin/dashboard.html", {"request": request }
+        request, "admin/dashboard.html", {"request": request }
     )
 
 
@@ -285,7 +285,7 @@ def admin_import(
 ):
 
     return templates.TemplateResponse(
-        "admin/import.html", {"request": request }
+        request, "admin/import.html", {"request": request }
     )
 
 @router.post("/import", response_class=HTMLResponse)
@@ -305,7 +305,7 @@ async def import_customers(
         content = csv_text.strip()
     else:
         return templates.TemplateResponse(
-            "partials/message.html",
+            request, "partials/message.html",
             {"request": request, "message": "No CSV data provided."},
         )
 
@@ -359,7 +359,7 @@ def save_json(filename, data):
 def admin_data(request: Request):
     """Display current JSON data in editable textareas."""
     return templates.TemplateResponse(
-        "admin/data.html",
+        request, "admin/data.html",
         {
             "request": request,
             "categories_json": json.dumps(constants.categories, indent=2, ensure_ascii=False),
@@ -403,7 +403,7 @@ def save_data(
     importlib.reload(constants)
 
     return templates.TemplateResponse(
-        "admin/data.html",
+        request, "admin/data.html",
         {
             "request": request,
             "categories_json": json.dumps(constants.categories, indent=2, ensure_ascii=False),
